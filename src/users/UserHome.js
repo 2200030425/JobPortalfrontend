@@ -1,111 +1,273 @@
-import React, { useState, useEffect } from "react";
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import Navbar from "../Navbar";
+
+// export default function ModernDashboard() {
+//   const navigate = useNavigate();
+
+//   const handleExploreClick = () => {
+//     navigate("/user/jobs");
+//   };
+
+//   return (
+//     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
+//       {/* Pass showJobs={false} to hide the Jobs button */}
+//       <Navbar showJobs={false} />
+
+//       {/* Main Section */}
+//       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "5% 10%" }}>
+//         {/* Left Section: Text Content */}
+//         <div style={{ flex: 1 }}>
+//           <h1 style={{ fontSize: "3.5rem", fontWeight: "bold", color: "#2c2c54" }}>
+//             From <span style={{ color: "#4caf50" }}>Pixels</span> to <span style={{ color: "#2196f3" }}>Possibilities</span>
+//           </h1>
+//           <p style={{ fontSize: "1.2rem", color: "#6c757d", margin: "20px 0" }}>
+//             Manage your profile and explore exciting job opportunities tailored just for you.
+//           </p>
+//           <button
+//             style={{
+//               padding: "15px 30px",
+//               fontSize: "1rem",
+//               backgroundColor: "#007bff",
+//               color: "#fff",
+//               border: "none",
+//               borderRadius: "30px",
+//               cursor: "pointer",
+//               marginTop: "20px",
+//               boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+//               transition: "all 0.3s ease",
+//             }}
+//             onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
+//             onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bff")}
+//             onClick={handleExploreClick}
+//           >
+//             Explore Now
+//           </button>
+//         </div>
+
+//         {/* Right Section: Images */}
+//         <div style={{ flex: 1, display: "flex", justifyContent: "center", position: "relative" }}>
+//           {/* Mockup 1 */}
+//           <img
+//             src={require("../images/e.jpg")}
+//             alt="Mobile Mockup 1"
+//             style={{
+//               position: "absolute",
+//               top: "10%",
+//               left: "20%",
+//               width: "200px",
+//               transform: "rotate(-10deg)",
+//               boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+//               borderRadius: "10px",
+//             }}
+//           />
+//           {/* Mockup 2 */}
+//           <img
+//             src={require("../images/uh.jpg")}
+//             alt="Mobile Mockup 2"
+//             style={{
+//               position: "absolute",
+//               top: "40%",
+//               right: "10%",
+//               width: "200px",
+//               transform: "rotate(10deg)",
+//               boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+//               borderRadius: "10px",
+//             }}
+//           />
+//           {/* Mockup 3 */}
+//           <img
+//             src={require("../images/ur.jpg")}
+//             alt="Mobile Mockup 3"
+//             style={{
+//               position: "absolute",
+//               bottom: "10%",
+//               left: "25%",
+//               width: "200px",
+//               transform: "rotate(-5deg)",
+//               boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+//               borderRadius: "10px",
+//             }}
+//           />
+//         </div>
+//       </div>
+
+//       {/* Footer Section */}
+//       <div
+//         style={{
+//           textAlign: "center",
+//           padding: "10px",
+//           fontSize: "1rem",
+//           color: "#dfd5d4",
+//         }}
+//       >
+//         Designed for the Job Portal | User ID: 1
+//       </div>
+//     </div>
+//   );
+// }
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import jobImage from "../images/jobcard.jpg"; // Import the common image
-import userhome from "../images/userhome.jpg";
+import Navbar from "../Navbar";
 
-export default function UserHome() {
-  const [jobs, setJobs] = useState([]);
-  const [hoveredCard, setHoveredCard] = useState(null); // State to track hovered card
-
+export default function ModernDashboard() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/jobs");
-        setJobs(response.data);
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      }
-    };
-
-    fetchJobs();
-  }, []);
-
-  const handleApply = (jobId) => {
-    navigate(`/user/job/${jobId}`);
-  };
-
-  const handleLogout = () => {
-    console.log("User logged out");
-    navigate("/"); // Navigate to the login page after logout
+  const handleExploreClick = () => {
+    navigate("/user/jobs");
   };
 
   return (
     <div
       style={{
-        backgroundImage: `url(${userhome})`,
-        backgroundSize: "cover",
+        backgroundImage: `url(${require("../images/ui.jpg")})`, // Add background image
+        backgroundSize: "cover", // Ensure the image covers the entire page
+        backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         minHeight: "100vh",
+        fontFamily: "Arial, sans-serif",
+        position: "relative", // For overlay effects
+        zIndex: 1,
       }}
     >
-      {/* Navigation Bar */}
-      <nav
-        className="navbar navbar-expand-lg navbar-light"
+      {/* Optional: Add a semi-transparent overlay */}
+      <div
         style={{
-          backgroundColor: "#c1e2f3",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)", // Black with 50% opacity
+          zIndex: 2,
         }}
-      >
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
-            Job Portal
-          </a>
-          <div className="collapse navbar-collapse justify-content-end">
-            <button className="btn btn-danger" onClick={handleLogout}>
-              Logout
+      ></div>
+
+      {/* Navbar and Content */}
+      <div style={{ position: "relative", zIndex: 3 }}>
+        {/* Pass showJobs={false} to hide the Jobs button */}
+        <Navbar showJobs={false} />
+
+        {/* Main Section */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "5% 10%",
+          }}
+        >
+          {/* Left Section: Text Content */}
+          <div style={{ flex: 1 }}>
+            <h1
+              style={{
+                fontSize: "3.5rem",
+                fontWeight: "bold",
+                color: "#ffffff", // White text for contrast
+              }}
+            >
+              From <span style={{ color: "#4caf50" }}>Pixels</span> to{" "}
+              <span style={{ color: "#2196f3" }}>Possibilities</span>
+            </h1>
+            <p
+              style={{
+                fontSize: "1.2rem",
+                color: "#d3d3d3",
+                margin: "20px 0",
+              }}
+            >
+              Manage your profile and explore exciting job opportunities
+              tailored just for you.
+            </p>
+            <button
+              style={{
+                padding: "15px 30px",
+                fontSize: "1rem",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                border: "none",
+                borderRadius: "30px",
+                cursor: "pointer",
+                marginTop: "20px",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "#0056b3")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "#007bff")
+              }
+              onClick={handleExploreClick}
+            >
+              Explore Now
             </button>
           </div>
-        </div>
-      </nav>
 
-      {/* Main Content */}
-      <div className="container my-5">
-        <h2 className="text-center mb-4 text-primary">Available Jobs</h2>
-        <div className="row">
-          {jobs.map((job) => (
-            <div
-              className="col-md-4 mb-4"
-              key={job.id}
-              onMouseEnter={() => setHoveredCard(job.id)} // Set the hovered card
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              <div
-                className="card shadow-sm border-0 h-100"
-                style={{
-                  transition: "transform 0.3s, boxShadow 0.3s",
-                  transform:
-                    hoveredCard === job.id ? "scale(1.05)" : "scale(1)",
-                  boxShadow:
-                    hoveredCard === job.id
-                      ? "0 4px 15px rgba(0, 0, 0, 0.2)"
-                      : "none",
-                }}
-              >
-                <img
-                  className="card-img-top"
-                  src={jobImage} // Use the common image for all cards
-                  alt="Job"
-                  style={{ height: "150px", objectFit: "cover" }} // Set a fixed height for images
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{job.name}</h5>
-                  <p className="card-text flex-grow-1">
-                    {job.description
-                      ? `${job.description.substring(0, 60)}...`
-                      : "No description available."}
-                  </p>
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={() => handleApply(job.id)}
-                  >
-                    Apply Now
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Right Section: Images */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+            {/* Mockup 1 */}
+            <img
+              src={require("../images/e.jpg")}
+              alt="Mobile Mockup 1"
+              style={{
+                position: "absolute",
+                top: "10%",
+                left: "20%",
+                width: "200px",
+                transform: "rotate(-10deg)",
+                boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
+              }}
+            />
+            {/* Mockup 2 */}
+            <img
+              src={require("../images/uh.jpg")}
+              alt="Mobile Mockup 2"
+              style={{
+                position: "absolute",
+                top: "40%",
+                right: "10%",
+                width: "200px",
+                transform: "rotate(10deg)",
+                boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
+              }}
+            />
+            {/* Mockup 3 */}
+            <img
+              src={require("../images/ur.jpg")}
+              alt="Mobile Mockup 3"
+              style={{
+                position: "absolute",
+                bottom: "10%",
+                left: "25%",
+                width: "200px",
+                transform: "rotate(-5deg)",
+                boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Footer Section */}
+        <div
+          style={{
+            textAlign: "center",
+            padding: "10px",
+            fontSize: "1rem",
+            color: "#dfd5d4",
+          }}
+        >
+
         </div>
       </div>
     </div>

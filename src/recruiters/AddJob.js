@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import addjob from "../images/addjob.jpg";
+import { useNavigate } from "react-router-dom";
+import NavbarRec from "../NavbarRec";
+import image from "../images/recruiteraddjob.jpg"; // Import the image
 
 export default function AddJob() {
   const [formData, setFormData] = useState({
@@ -9,27 +10,23 @@ export default function AddJob() {
     salary: "",
     location: "",
     description: "",
-    company: "", // Add company to state
-    mobile: "", // Add mobile to state
-    recruiter_id: "", // Add recruiter_id to state
+    company: "",
+    mobile: "",
+    recruiter_id: "",
   });
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
-  // Use useEffect to get recruiter_id from localStorage (assuming it's stored after login)
   useEffect(() => {
-    const recruiterId = localStorage.getItem("id");
-    console.log("Fetched Recruiter ID from Local Storage: ", recruiterId);
+    const recruiterId = localStorage.getItem("recruiterId");
     if (recruiterId) {
       setFormData((prevState) => ({
         ...prevState,
-        recruiter_id: recruiterId, // Set recruiter_id in formData
+        recruiter_id: recruiterId,
       }));
     }
   }, []);
-  const handleBack = () => {
-    navigate("/recruiter");
-  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -40,189 +37,174 @@ export default function AddJob() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("try");
-      // Prepare the job object
       const jobData = {
         name: formData.name,
         salary: formData.salary,
         location: formData.location,
         description: formData.description,
-        company: formData.company, // Include company in jobData
-        mobile: formData.mobile, // Include mobile in jobData
-        recruiter: { id: formData.recruiter_id }, // Associate the recruiter by id
+        company: formData.company,
+        mobile: formData.mobile,
+        recruiter: { id: formData.recruiter_id },
       };
-      console.log(jobData);
-      // Post the job data to the backend, including recruiter
       await axios.post("http://localhost:8080/job", jobData);
       alert("Job added successfully!");
-
-      // Redirect to the recruiter page after submission
       navigate("/recruiter");
-
-      // Optionally, reset the form after submission
-      // setFormData({
-      //   name: "",
-      //   salary: "",
-      //   location: "",
-      //   description: "",
-      //   company: "",
-      //   mobile: "", // Reset mobile
-      //   recruiter_id: "",
-      // });
     } catch (error) {
-      console.log("Recruiter ID: ", formData.recruiter_id);
-      console.log(formData);
       console.error("Error adding job:", error.response || error.message);
       alert("Failed to add job. Please try again.");
     }
   };
 
   return (
-    <>
-      <style>
-        {`
-          .custom-navbar {
-            background-color: #98e6f5 !important; /* Ensure the background color is applied */
-          }
-          .custom-navbar .nav-link, 
-          .custom-navbar .navbar-brand {
-            color: #fff !important; /* Ensure the text color is white */
-          }
-        `}
-      </style>
-      {/* Navbar */}
+    <div
+      style={{
+        backgroundImage: `url(${image})`, // Correctly use the background image
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh", // Full viewport height
+        overflow: "hidden", // Prevent scrolling
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <NavbarRec />
       <div
         style={{
-          backgroundImage: `url(${addjob})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          minHeight: "100vh",
+          display: "flex",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
         }}
       >
-        <nav className="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
-          <div className="container-fluid">
-            {/* Logout button on the right side */}
-            <ul className="navbar-nav ms-left">
-              <li className="nav-item">
-                <button className="btn btn-danger" onClick={handleBack}>
-                  Back
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <div className="container my-5">
+        <div
+          className="card border-0"
+          style={{
+            width: "600px",
+            maxHeight: "90%",
+            borderRadius: "20px",
+            backgroundColor: "#dde4ea", // Background color #bfcede
+            padding: "20px",
+            boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+            overflowY: "auto", // Keeps scrolling inside the container
+            marginTop: "-35px", // Lifts the container upwards by 50px
+          }}
+        >
           <h2 className="text-center mb-4">Add Job</h2>
-          <div
-            className="card mx-auto"
-            style={{
-              width: "650px",
-              height: "700px",
-              borderRadius: "20px",
-              // backgroundColor: "#dceefe",
-            }}
-          >
-            <div className="card-body d-flex flex-column align-items-center">
-              <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3">
-                  <label htmlFor="name">Job Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    name="name"
-                    style={{
-                      width: "600px",
-                      borderColor: "black",
-                    }}
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="salary">Salary</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="salary"
-                    name="salary"
-                    style={{
-                      borderColor: "black",
-                    }}
-                    value={formData.salary}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="location">Location</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="location"
-                    name="location"
-                    style={{
-                      borderColor: "black",
-                    }}
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="company">Company</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="company"
-                    name="company" // Set name for company input
-                    style={{
-                      borderColor: "black",
-                    }}
-                    value={formData.company}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="mobile">Mobile</label>
-                  <input
-                    type="tel" // Use 'tel' type for mobile input
-                    className="form-control"
-                    id="mobile"
-                    name="mobile" // Set name for mobile input
-                    style={{
-                      borderColor: "black",
-                    }}
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="description">Job Description</label>
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    style={{
-                      borderColor: "black",
-                    }}
-                    onChange={handleChange}
-                    required
-                    rows="4"
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Add Job
-                </button>
-              </form>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group mb-3">
+              <label htmlFor="name">Job Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
-          </div>
+            <div className="form-group mb-3">
+              <label htmlFor="salary">Salary</label>
+              <input
+                type="number"
+                className="form-control"
+                id="salary"
+                name="salary"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.salary}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="location">Location</label>
+              <input
+                type="text"
+                className="form-control"
+                id="location"
+                name="location"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.location}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="company">Company</label>
+              <input
+                type="text"
+                className="form-control"
+                id="company"
+                name="company"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.company}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="mobile">Mobile</label>
+              <input
+                type="tel"
+                className="form-control"
+                id="mobile"
+                name="mobile"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="description">Job Description</label>
+              <textarea
+                className="form-control"
+                id="description"
+                name="description"
+                rows="4"
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "#ffffff", // Light blue background color for input fields
+                }}
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary w-100" // Blue button
+              style={{
+                borderRadius: "10px",
+                backgroundColor: "#007bff", // Blue color
+                border: "none",
+                padding: "10px",
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#bacbdb")} // Hover color
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "#6a7e93")} // Normal color
+            >
+              Add Job
+            </button>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

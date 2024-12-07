@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { useNavigate } from "react-router-dom";
+import recruiterRegisterImg from "../images/recruiterregister.jpg";
 
 export default function RecruiterRegister() {
   const [recruiter, setRecruiter] = useState({
@@ -13,10 +14,56 @@ export default function RecruiterRegister() {
     confirmPassword: "",
   });
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const { mobile, firstName, lastName, email, age, password, confirmPassword } =
     recruiter;
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!/^\d{10}$/.test(mobile)) {
+      newErrors.mobile = "Mobile number must be exactly 10 digits.";
+    }
+
+    if (!/^[A-Za-z]+$/.test(firstName)) {
+      newErrors.firstName = "First Name must contain only alphabets.";
+    } else if (firstName.length <= 3) {
+      newErrors.firstName = "First Name must be more than 3 characters.";
+    }
+    
+    if (!/^[A-Za-z]+$/.test(lastName)) {
+      newErrors.lastName = "Last Name must contain only alphabets.";
+    } else if (lastName.length <= 3) {
+      newErrors.lastName = "Last Name must be more than 3 characters.";
+    }
+    
+    if (firstName.toLowerCase() === lastName.toLowerCase()) {
+      newErrors.lastName = "First Name and Last Name must not be the same.";
+    }
+    
+
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+      newErrors.email = "Email must end with '@gmail.com'.";
+    }
+
+    if (!age || age < 18 || age > 100) {
+      newErrors.age = "Age must be between 18 and 100.";
+    }
+
+    if (!/^[A-Za-z\d]{7,}$/.test(password)) {
+      newErrors.password =
+        "Password must be at least 7 characters long, containing only letters and numbers with no spaces.";
+    }
+
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     setRecruiter({ ...recruiter, [e.target.name]: e.target.value });
@@ -24,11 +71,8 @@ export default function RecruiterRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Basic validation
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+    if (!validateForm()) return;
+
     try {
       const response = await axios.post(
         "http://localhost:8080/recruiter",
@@ -36,8 +80,7 @@ export default function RecruiterRegister() {
       );
       if (response.status === 201) {
         alert("Recruiter registered successfully!");
-        // Redirect the user to /user page
-        navigate("/recruiter"); // This will navigate to the /user route
+        navigate("/recruiter");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -46,147 +89,174 @@ export default function RecruiterRegister() {
   };
 
   return (
-    <section className="vh-100" style={{ backgroundColor: "#eee" }}>
-      <div className="container h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-lg-12 col-xl-11">
-            <div className="card text-black" style={{ borderRadius: "25px" }}>
-              <div className="card-body p-md-5">
-                <div className="row justify-content-center">
-                  <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                    <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                      Sign up
-                    </p>
-                    <form className="mx-1 mx-md-4" onSubmit={handleSubmit}>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-user fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="tel"
-                            name="mobile"
-                            className="form-control"
-                            placeholder="Mobile"
-                            value={mobile}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-user fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="text"
-                            name="firstName"
-                            className="form-control"
-                            placeholder="First Name"
-                            value={firstName}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-user fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="text"
-                            name="lastName"
-                            className="form-control"
-                            placeholder="Last Name"
-                            value={lastName}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            placeholder="Email"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-calendar fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="number"
-                            name="age"
-                            className="form-control"
-                            placeholder="Age"
-                            value={age}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            placeholder="Password"
-                            value={password}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex flex-row align-items-center mb-4">
-                        <i className="fas fa-key fa-lg me-3 fa-fw"></i>
-                        <div className="form-outline flex-fill mb-0">
-                          <input
-                            type="password"
-                            name="confirmPassword"
-                            className="form-control"
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="form-check d-flex justify-content-center mb-5">
-                        <input
-                          className="form-check-input me-2"
-                          type="checkbox"
-                          required
-                        />
-                        <label className="form-check-label">
-                          I agree to the <a href="#!">Terms of Service</a>
-                        </label>
-                      </div>
-                      <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <button
-                          type="submit"
-                          className="btn btn-primary btn-lg"
-                        >
-                          Register
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                  <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                      className="img-fluid"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
+    <section
+      className="d-flex align-items-center justify-content-center"
+      style={{
+        height: "100vh",
+        backgroundImage: `url(${recruiterRegisterImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center 29%",
+        backgroundRepeat: "no-repeat",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="card text-black"
+        style={{
+          width: "350px",
+          borderRadius: "20px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          opacity: 0.8,
+          marginTop: "50px",
+        }}
+      >
+        <div className="card-body p-4">
+          <h3 className="text-center fw-bold mb-4" style={{ color: "#121933" }}>
+            Sign Up
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <input
+                type="tel"
+                name="mobile"
+                className={`form-control ${
+                  errors.mobile ? "is-invalid" : ""
+                }`}
+                placeholder="Mobile"
+                value={mobile}
+                onChange={handleChange}
+                required
+              />
+              {errors.mobile && (
+                <div className="invalid-feedback">{errors.mobile}</div>
+              )}
             </div>
-          </div>
+            <div className="mb-3">
+              <input
+                type="text"
+                name="firstName"
+                className={`form-control ${
+                  errors.firstName ? "is-invalid" : ""
+                }`}
+                placeholder="First Name"
+                value={firstName}
+                onChange={handleChange}
+                required
+              />
+              {errors.firstName && (
+                <div className="invalid-feedback">{errors.firstName}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <input
+                type="text"
+                name="lastName"
+                className={`form-control ${
+                  errors.lastName ? "is-invalid" : ""
+                }`}
+                placeholder="Last Name"
+                value={lastName}
+                onChange={handleChange}
+                required
+              />
+              {errors.lastName && (
+                <div className="invalid-feedback">{errors.lastName}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                placeholder="Email"
+                value={email}
+                onChange={handleChange}
+                required
+              />
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <input
+                type="number"
+                name="age"
+                className={`form-control ${errors.age ? "is-invalid" : ""}`}
+                placeholder="Age"
+                value={age}
+                onChange={handleChange}
+                required
+              />
+              {errors.age && (
+                <div className="invalid-feedback">{errors.age}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                name="password"
+                className={`form-control ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+                placeholder="Password"
+                value={password}
+                onChange={handleChange}
+                required
+              />
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                name="confirmPassword"
+                className={`form-control ${
+                  errors.confirmPassword ? "is-invalid" : ""
+                }`}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {errors.confirmPassword && (
+                <div className="invalid-feedback">
+                  {errors.confirmPassword}
+                </div>
+              )}
+            </div>
+            <div className="form-check mb-3">
+              <input className="form-check-input" type="checkbox" required />
+              <label
+                className="form-check-label"
+                style={{ color: "#121933" }}
+              >
+                I agree to the{" "}
+                <a href="#!" style={{ color: "#121933" }}>
+                  Terms of Service
+                </a>
+              </label>
+            </div>
+            <div className="d-grid">
+              <button
+                type="submit"
+                className="btn btn-primary btn-block"
+                style={{
+                  backgroundColor: "#142141",
+                  borderColor: "#142141",
+                  transition: "background-color 0.3s ease",
+                }}
+                onMouseEnter={(e) =>
+                  (e.target.style.backgroundColor = "#8da8ca")
+                }
+                onMouseLeave={(e) =>
+                  (e.target.style.backgroundColor = "#142141")
+                }
+              >
+                Register
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

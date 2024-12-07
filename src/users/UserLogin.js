@@ -2,137 +2,200 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function UserLogin() {
+const UserLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleRegisterClick = () => {
+  const redirectToRegister = () => {
     navigate("/registeruser");
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
+    setLoading(true);
+    setError("");
     try {
       const response = await axios.post(
-        `http://localhost:8080/userlogin/${encodeURIComponent(
-          email
-        )}/${encodeURIComponent(password)}`,
-        {}, // Send an empty object since we don't need a body
+        `http://localhost:8080/userlogin/${email}/${password}`,
+        null,
         {
           headers: {
-            "Content-Type": "application/json", // Ensure correct content type
+            "Content-Type": "application/json",
           },
         }
       );
+
       if (response.status === 200) {
+        const { token, userId, email: userEmail } = response.data;
+
+        localStorage.setItem("jwtToken", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userEmail", userEmail);
+
         alert("Login successful!");
-        // Redirect to user home or dashboard
         navigate("/user");
       }
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Invalid email or password. Please try again.");
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("Invalid email or password. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <section className="vh-100">
-        <div className="container-fluid h-custom">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-md-9 col-lg-6 col-xl-5">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                className="img-fluid"
-                alt="Sample"
-              />
-            </div>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              {/* Add headings here */}
-              <h1 className="text-center mb-4">Job Portal</h1>
-              <h5 className="text-center mb-4">Welcome</h5>
+    <section className="background-radial-gradient overflow-hidden">
+      <style>
+        {`
+          body, html {
+            margin: 0;
+            padding: 0;
+          }
 
-              <form onSubmit={handleLogin}>
-                {/* Email input */}
-                <div className="form-outline mb-4">
-                  <input
-                    style={{ border: "2px solid #007bff" }}
-                    type="email"
-                    id="form3Example3"
-                    className="form-control form-control-lg"
-                    placeholder="Enter a valid email address"
-                    value={email} // Controlled input
-                    onChange={(e) => setEmail(e.target.value)} // Handle input change
-                    required
-                  />
-                  <label className="form-label" htmlFor="form3Example3">
-                    Email address
-                  </label>
-                </div>
-                {/* Password input */}
-                <div className="form-outline mb-3">
-                  <input
-                    style={{ border: "2px solid #007bff" }}
-                    type="password"
-                    id="form3Example4"
-                    className="form-control form-control-lg"
-                    placeholder="Enter password"
-                    value={password} // Controlled input
-                    onChange={(e) => setPassword(e.target.value)} // Handle input change
-                    required
-                  />
-                  <label className="form-label" htmlFor="form3Example4">
-                    Password
-                  </label>
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  {/* Checkbox */}
-                  {/* <div className="form-check mb-0">
+          .background-radial-gradient {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(
+              ellipse at center,
+              hsl(218, 41%, 35%) 10%,
+              hsl(218, 41%, 25%) 40%,
+              hsl(218, 41%, 20%) 75%,
+              transparent 100%
+            );
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          #radius-shape-1 {
+            height: 250px;
+            width: 250px;
+            top: -70px;
+            left: -140px;
+            background: radial-gradient(#7200a1, #d700ff);
+            z-index: 1;
+          }
+
+          #radius-shape-2 {
+            border-radius: 50%;
+            bottom: -50px;
+            right: -120px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(#7200a1, #d700ff);
+            z-index: 1;
+          }
+
+          .bg-glass {
+          background-color: #9da8ba; /* Your desired color */
+          backdrop-filter: blur(20px);
+          border-radius: 15px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          z-index: 2;
+          }
+
+          .btn-primary {
+            background-color: hsl(218, 81%, 55%);
+            border: none;
+            transition: all 0.3s ease-in-out;
+          }
+
+          .btn-primary:hover {
+            background-color: hsl(218, 81%, 65%);
+          }
+
+          .form-outline input:focus {
+            border-color: hsl(218, 81%, 65%);
+            box-shadow: 0 0 8px hsl(218, 81%, 65%);
+          }
+        `}
+      </style>
+
+      <div className="container px-4 py-5 px-md-5 text-center text-lg-start">
+        <div className="row gx-lg-5 align-items-center">
+          <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 2 }}>
+            <h1 className="display-5 fw-bold text-light">
+              Welcome Back! <br />
+              <span style={{ color: "hsl(218, 81%, 75%)" }}>
+                Log in to continue
+              </span>
+            </h1>
+            <p className="text-light opacity-75">
+              Log in to manage your profile and view your opportunities.
+            </p>
+          </div>
+
+          <div className="col-lg-6 position-relative">
+            <div id="radius-shape-1" className="position-absolute shadow-5-strong"></div>
+            <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
+
+            <div className="card bg-glass">
+              <div className="card-body px-4 py-5 px-md-5">
+                <form onSubmit={handleLogin}>
+                  <div className="form-outline mb-4">
                     <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      id="form2Example3"
+                      type="email"
+                      id="email"
+                      className="form-control"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
-                    <label className="form-check-label" htmlFor="form2Example3">
-                      Remember me
+                    <label className="form-label" htmlFor="email">
+                      Email Address
                     </label>
-                  </div> */}
-                  {/* <a href="#!" className="text-body">
-                    Forgot password?
-                  </a> */}
-                </div>
-                <div className="text-center text-lg-start mt-4 pt-2">
+                  </div>
+
+                  <div className="form-outline mb-4">
+                    <input
+                      type="password"
+                      id="password"
+                      className="form-control"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <label className="form-label" htmlFor="password">
+                      Password
+                    </label>
+                  </div>
+
+                  {error && <div className="alert alert-danger">{error}</div>}
+
                   <button
                     type="submit"
-                    className="btn btn-primary btn-lg"
-                    style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+                    className="btn btn-primary btn-block mb-4"
+                    disabled={loading}
                   >
-                    Login
+                    {loading ? "Logging in..." : "Sign In"}
                   </button>
-                  <p className="small fw-bold mt-2 pt-1 mb-0">
-                    Don't have an account?{" "}
-                    <button
-                      className="btn btn-link p-0 link-danger"
-                      style={{ textDecoration: "none" }}
-                      onClick={handleRegisterClick}
-                    >
-                      Register
-                    </button>
-                  </p>
-                </div>
-              </form>
+
+                  <div className="text-center">
+                    <p>
+                      Don't have an account?{" "}
+                      <button
+                        type="button"
+                        className="btn btn-link"
+                        onClick={redirectToRegister}
+                      >
+                        Sign Up
+                      </button>
+                    </p>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-
-        <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-          {/* Copyright */}
-          <div className="text-white mb-3 mb-md-0">
-            Copyright © 2020. All rights reserved.
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
-}
+};
+
+export default UserLogin;

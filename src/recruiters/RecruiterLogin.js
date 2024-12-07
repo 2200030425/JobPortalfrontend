@@ -1,159 +1,175 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import recruiterLoginImg from "../images/recruiterLogin.png";
+import recruiterLoginImg from "../images/recruiterLoginbgg.jpg";
 
 export default function RecruiterLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegisterClick = () => {
     navigate("/registerRecruiter");
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
+    setLoading(true);
+    setError("");
     try {
       const response = await axios.post(
         `http://localhost:8080/recruiterlogin/${encodeURIComponent(
           email
         )}/${encodeURIComponent(password)}`,
-        {}, // Send an empty object since we don't need a body
+        {},
         {
           headers: {
-            "Content-Type": "application/json", // Ensure correct content type
+            "Content-Type": "application/json",
           },
         }
       );
-      console.log("API Response:", response.data);
+
       if (response.status === 200) {
         alert("Login successful!");
-
-        // Assuming the response contains the recruiter object
-        const recruiterId = response.data.id; // Change according to your API response structure
-        localStorage.setItem("id", recruiterId); // Store recruiter ID in local storage
-        console.log(localStorage.getItem("id"));
-
-        // Call your context function to manage auth state
-
-        // Redirect to the recruiter dashboard
+        const recruiterId = response.data.id;
+        localStorage.setItem("recruiterId", recruiterId);
         navigate("/recruiter");
       }
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("Invalid email or password. Please try again.");
+      setError("Invalid email or password. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div>
-      <section className="vh-100">
-        <div className="container-fluid h-custom">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-md-9 col-lg-6 col-xl-5">
-              <img src={recruiterLoginImg} className="img-fluid" alt="Sample" />
-            </div>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <h1 className="text-center mb-4">Job Portal</h1>
-              <h5 className="text-center mb-4">Welcome</h5>
-              <form onSubmit={handleLogin}>
-                {" "}
-                {/* Add onSubmit handler */}
-                {/* Email input */}
-                <div className="form-outline mb-4">
-                  <input
-                    style={{ border: "2px solid #007bff" }}
-                    type="email"
-                    id="form3Example3"
-                    className="form-control form-control-lg"
-                    placeholder="Enter a valid email address"
-                    value={email} // Controlled input
-                    onChange={(e) => setEmail(e.target.value)} // Handle input change
-                    required
-                  />
-                  <label className="form-label" htmlFor="form3Example3">
-                    Email address
-                  </label>
-                </div>
-                {/* Password input */}
-                <div className="form-outline mb-3">
-                  <input
-                    style={{ border: "2px solid #007bff" }}
-                    type="password"
-                    id="form3Example4"
-                    className="form-control form-control-lg"
-                    placeholder="Enter password"
-                    value={password} // Controlled input
-                    onChange={(e) => setPassword(e.target.value)} // Handle input change
-                    required
-                  />
-                  <label className="form-label" htmlFor="form3Example4">
-                    Password
-                  </label>
-                </div>
-                {/* <div className="d-flex justify-content-between align-items-center">
-                  
-                  <div className="form-check mb-0">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      id="form2Example3"
-                    />
-                    <label className="form-check-label" htmlFor="form2Example3">
-                      Remember me
-                    </label>
-                  </div>
-                  <a href="#!" className="text-body">
-                    Forgot password?
-                  </a>
-                </div> */}
-                <div className="text-center text-lg-start mt-4 pt-2">
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-lg"
-                    style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                  >
-                    Login
-                  </button>
-                  <p className="small fw-bold mt-2 pt-1 mb-0">
-                    Don't have an account?{" "}
-                    <button
-                      className="btn btn-link p-0 link-danger"
-                      style={{ textDecoration: "none" }}
-                      onClick={handleRegisterClick}
-                    >
-                      Register
-                    </button>
-                  </p>
-                </div>
-              </form>
-            </div>
+      <section
+        style={{
+          backgroundImage: `url(${recruiterLoginImg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 5%",
+          backgroundRepeat: "no-repeat",
+          minHeight: "94vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <div
+          
+        >
+          <div style={{ flex: 1, textAlign: "center", color: "#334054" }}>
+            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            <h1>Job Portal</h1>
+            <h5>Welcome, Recruiter!</h5>
+            <br></br>
           </div>
-        </div>
+          <form
+            onSubmit={handleLogin}
+            
+          >
+            <div className="form-outline mb-4">
+              <input
+                type="email"
+                className="form-control form-control-lg shadow-sm"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} // Updates the email state
+                required
+                style={{
+                  borderRadius: "10px",
+                  border: "none",
+                  padding: "10px",
+                  transition: "0.3s ease",
+                }}
+                onFocus={(e) => (e.target.style.backgroundColor = "#e9f7ff")}
+                onBlur={(e) => (e.target.style.backgroundColor = "#fff")}
+              />
+              <label className="form-label mt-2">Email</label>
+            </div>
 
-        <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-          {/* Copyright */}
-          <div className="text-white mb-3 mb-md-0">
-            Copyright © 2020. All rights reserved.
-          </div>
-          {/* Right */}
-          {/* <div>
-            <a href="#!" className="text-white me-4">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="#!" className="text-white me-4">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="#!" className="text-white me-4">
-              <i className="fab fa-google"></i>
-            </a>
-            <a href="#!" className="text-white">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div> */}
+            <div className="form-outline mb-4">
+              <input
+                type="password"
+                className="form-control form-control-lg shadow-sm"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} // Updates the password state
+                required
+                style={{
+                  borderRadius: "10px",
+                  border: "none",
+                  padding: "10px",
+                  transition: "0.3s ease",
+                }}
+                onFocus={(e) => (e.target.style.backgroundColor = "#e9f7ff")}
+                onBlur={(e) => (e.target.style.backgroundColor = "#fff")}
+              />
+              <label className="form-label mt-2">Password</label>
+            </div>
+
+            {error && <div className="alert alert-danger">{error}</div>}
+
+            <div className="text-center mt-4">
+            <button
+  type="submit"
+  className="btn btn-primary btn-lg"
+  style={{
+    padding: "10px 40px",
+    borderRadius: "50px",
+    border: "none",
+    backgroundColor: "#445267",  // Updated color
+    color: "#fff",  // Ensures the text is white
+    transition: "all 0.3s ease-in-out",
+  }}
+  disabled={loading}
+  onMouseEnter={(e) =>
+    (e.target.style.backgroundColor = "#839aba")  // Hover color updated
+  }
+  onMouseLeave={(e) =>
+    (e.target.style.backgroundColor = "#445267")  // Reset to initial color
+  }
+>
+  {loading ? "Logging in..." : "Login"}
+</button>
+              <p className="small fw-bold mt-3">
+                Don't have an account?{" "}
+                <button
+                  className="btn btn-link text-danger p-0"
+                  style={{ textDecoration: "none" }}
+                  onClick={handleRegisterClick} // Ensures the register button works
+                >
+                  <div style={{ flex: 1, textAlign: "center", color: "#334054" }}>
+                  Register
+                  
+                  </div>
+                  
+                </button>
+              </p>
+            </div>
+          </form>
         </div>
       </section>
+
+      <footer
+        style={{
+          backgroundColor: "#b1bfd4",
+          padding: "10px",
+          position: "relative",
+          bottom: "0",
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <p className="mb-0 text-muted" >
+          &copy; {new Date().getFullYear()} Job Portal. All Rights Reserved.
+        </p>
+      </footer>
     </div>
   );
 }

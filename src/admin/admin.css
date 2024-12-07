@@ -1,15 +1,149 @@
-.divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-.h-custom {
-height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
-}
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ef476f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .logout-btn:hover {
+    background-color: #d43b5e;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 15px;
+  }
+  .nav-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #007bff;
+    background-color: #f4f4f4;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .nav-btn.active {
+    background-color: #0056b3;
+    color: white;
+  }
+  .nav-btn:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .search-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  .search-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .search-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  thead {
+    background-color: #007bff;
+    color: white;
+  }
+  thead th, tbody td {
+    padding: 15px;
+    text-align: left;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  tbody tr:hover {
+    background-color: #eaf4fe;
+    cursor: pointer;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .pagination button {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    color: #007bff;
+    cursor: pointer;
+  }
+  .pagination button:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  .pagination button:disabled {
+    background-color: #e0e0e0;
+    color: #bbb;
+    cursor: not-allowed;
+  }
+  .admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+    justify-content: flex-start;
+    min-height: 100vh; /* Full height for proper centering */
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 10px; /* Adjusts margin to push it down a bit from the top */
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    padding: 20px;
+    border-bottom: 2px solid #007bff; /* Optional: Adds a bottom border for styling */
+  }

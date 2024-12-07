@@ -1,102 +1,142 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import recruiterhome from "../images/recruiterhome.jpg";
+import NavbarRec from "../NavbarRec"; // Import the NavbarRec component
+import recruiterhomee from "../images/recruiterhome.jpg"; // Importing the image
 
 export default function RecruiterHome() {
-  const navigate = useNavigate(); // Initialize useNavigate to handle navigation
-
-  const handleLogout = () => {
-    // Logic to handle logout, like clearing local storage or calling API
-    localStorage.removeItem("id"); // Clear stored recruiter id, for example
-    navigate("/"); // Redirect to the login page
-  };
-
   return (
     <>
-      <style>
-        {`
-          .custom-navbar {
-            background-color: #5f84de !important; /* Ensure the background color is applied */
-          }
-          .custom-navbar .nav-link, 
-          .custom-navbar .navbar-brand {
-            color: #fff !important; /* Ensure the text color is white */
-          }
-        `}
-      </style>
-      {/* Navbar */}
       <div
         style={{
-          backgroundImage: `url(${recruiterhome})`,
+          backgroundImage: `url(${recruiterhomee})`, // Use the imported image
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "100vh",
+          minHeight: "100vh", // Full viewport height
+          backgroundColor: "#e7e7e5",
+          overflow: "hidden", // Prevent scroll
         }}
       >
-        <nav className="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="/recruiter">
-              Recruiter Dashboard
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+        {/* Navbar with inline style for background color */}
+        <NavbarRec style={{ backgroundColor: "#68afdb" }} />
+
+        {/* Main content */}
+        <div
+          className="container"
+          style={{
+            maxWidth: "800px", // Reduced max width for better compactness
+            margin: "0 auto",
+            padding: "15px", // Reduced padding
+            backgroundColor: "#afe0f8",
+            borderRadius: "8px",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+            opacity: "80%", // Slight transparency to help the text stand out
+            marginTop: "120px", // Adjusted top margin
+          }}
+        >
+         <h2
+  style={{
+    fontSize: "2rem", // Adjusted font size
+    color: "#4A5358", // Change color here
+    marginBottom: "15px",
+    fontWeight: "600",
+    letterSpacing: "1px",
+  }}
+>
+  Recruiter Dashboard
+</h2>
+
+
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "#555",
+              lineHeight: "1.6",
+              marginBottom: "20px",
+            }}
+          >
+            Manage job postings, review applications, and streamline your recruitment workflow to secure top talent quickly.
+          </p>
+
+          {/* Informational Sections */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "15px",
+            }}
+          >
+            <div
+              style={{
+                width: "45%",
+                backgroundColor: "#d6f0fd",
+                padding: "15px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                textAlign: "left",
+              }}
             >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav me-auto">
-                {/* Applications button */}
-                <li className="nav-item">
-                  <button
-                    className="nav-link btn btn-link"
-                    onClick={() => navigate("/recruiter/applications")}
-                  >
-                    Applications
-                  </button>
-                </li>
-                {/* Add Job button */}
-                <li className="nav-item">
-                  <button
-                    className="nav-link btn btn-link"
-                    onClick={() => navigate("/recruiter/addjob")}
-                  >
-                    Add Job
-                  </button>
-                </li>
-              </ul>
-              {/* Logout button on the right side */}
-              <ul className="navbar-nav ms-auto">
-                <li className="nav-item">
-                  <button className="btn btn-danger" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </li>
-              </ul>
+              <h4
+                style={{
+                  color: "#5f84de",
+                  fontSize: "1.2rem",
+                  marginBottom: "10px",
+                }}
+              >
+                Manage Job Listings
+              </h4>
+              <p style={{ color: "#666", fontSize: "0.95rem" }}>
+                Easily track, update, and close job postings. Manage your recruitment workflow efficiently.
+              </p>
+            </div>
+
+            <div
+              style={{
+                width: "45%",
+                backgroundColor: "#d6f0fd",
+                padding: "15px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                textAlign: "left",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#5f84de",
+                  fontSize: "1.2rem",
+                  marginBottom: "10px",
+                }}
+              >
+                Review Applications
+              </h4>
+              <p style={{ color: "#666", fontSize: "0.95rem" }}>
+                Review, shortlist, and track applications for the best candidates. Keep hiring simple.
+              </p>
             </div>
           </div>
-        </nav>
-        {/* Main content */}
-        <div className="container my-5">
-          <h2 className="text-center mb-4">Recruiter Dashboard</h2>
-          <div className="text-center">
-            {/* <button
-              className="btn btn-primary mx-3"
-              onClick={() => navigate("/recruiter/applications")}
+
+          <div
+            style={{
+              marginTop: "30px",
+              backgroundColor: "#d6f0fd",
+              padding: "15px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+              textAlign: "left",
+            }}
+          >
+            <h4
+              style={{
+                color: "#5f84de",
+                fontSize: "1.2rem",
+                marginBottom: "10px",
+              }}
             >
-              Applications
-            </button>
-            <button
-              className="btn btn-secondary mx-3"
-              onClick={() => navigate("/recruiter/addjob")}
-            >
-              Add Job
-            </button> */}
+              View Reports & Analytics
+            </h4>
+            <p style={{ color: "#666", fontSize: "0.95rem" }}>
+              Monitor key recruitment metrics and stay on top of your hiring process with detailed reports.
+            </p>
           </div>
         </div>
       </div>

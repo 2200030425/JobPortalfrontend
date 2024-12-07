@@ -1,0 +1,67 @@
+ /* /* .card {
+    transition: transform 0.3s; 
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card-title {
+    font-size: 1.2rem; 
+  }
+  
+  .card-text {
+    font-size: 0.9rem; 
+  } */
+/* Hero Section Button Hover Effect */
+button:hover {
+  background-color: #e7e7e5;
+  color: #cf00f8;
+  transform: translateY(-3px);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Card Styling */
+.card {
+  transition: transform 0.3s;
+  background-color: #ffffff;
+  color: #000;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-size: 1.2rem;
+}
+
+.card-text {
+  font-size: 0.9rem;
+} */
+/* Button Hover Effect */
+button:hover {
+  background-color: #e7e7e5;
+  color: #cf00f8;
+  transform: translateY(-3px);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Card Styles */
+.card {
+  transition: transform 0.3s;
+  background-color: #ffffff;
+  color: #000;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-size: 1.2rem;
+}
+
+.card-text {
+  font-size: 0.9rem;
+}
